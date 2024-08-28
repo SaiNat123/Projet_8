@@ -1,1 +1,6 @@
+pandas
+streamlit
+requests
 matplotlib
+shap
+numpy
