@@ -7,38 +7,31 @@ import pickle
 import shap
 import numpy as np
 
-def request_prediction(model_uri, client_id):
-    data_json = {"ID_client": client_id}
-    headers = {"Content-Type": "application/json"}
-    response = requests.post(url=model_uri, headers=headers, json=data_json)
-
-    if response.status_code != 200:
-        raise Exception(
-            f"Request failed with status {response.status_code}, {response.text}"
-        )
-
-    print("Response JSON:", response.json())  # Debugging line
-    return response.json()
 
 def main():
+    # 3. Récupération du modèle
+    def modele():
+        with open("./mlflow_model/model.pkl", "rb") as mod_pickle:
+            return pickle.load(mod_pickle)
+
+        # 2. Module de prédiction
+    def predict_proba(id_client):
+        data_client = echantillon_clients.loc[[id_client]]
+        perfect_model = modele()
+        # Assurez-vous que data_client est un DataFrame à une seule ligne
+        return perfect_model.predict_proba(data_client)[:, 1][0]  # Renvoie la probabilité pour la classe positive
+
     def info_client(ID):
         """Isole la ligne du client voulu"""
         data_client = echantillon_clients.loc[echantillon_clients.index == ID]
         print("Data Client:", data_client)  # Debugging line
         return data_client
 
-    def chargement_model():
-        """Chargement du modèle entraîné sur tous les clients avec target"""
-        with open(
-            "mlflow_model/model.pkl",
-            "rb",
-        ) as mod_pickle:
-            return pickle.load(mod_pickle)
-
     def prediction_1(client_id):
-      pred = request_prediction(URI, client_id)
+      pred = predict_proba (client_id)
+      #pred = request_prediction(URI, client_id)
       print("Predictions:", pred)  # Debugging line
-      return pred.get("probability", 0)
+      return pred
 
     echantillon_clients = pd.read_csv("Data_test/echantillon_clients.csv", index_col="SK_ID_CURR")
     trainset = pd.read_csv("Data_test/trainset.csv")
@@ -47,7 +40,7 @@ def main():
     seuil = echantillon_clients.iloc[0]["threshold"]
     echantillon_clients = echantillon_clients.drop(columns=["threshold"])
 
-    URI = "https://nadat-project7.onrender.com"
+    URI = "https://nadat-project7.onrender.com/predict"
                 
     client_choice = st.sidebar.selectbox(
         "Quel client souhaitez-vous évaluer ?", echantillon_clients.index
@@ -157,7 +150,7 @@ def main():
             client_choice
         )
     ):
-        perfect_model = chargement_model()
+        perfect_model = modele()
         f = lambda x: perfect_model.predict_proba(x)[:, 1]
         med = echantillon_clients.median().values.reshape(
             (1, echantillon_clients.shape[1])
@@ -170,7 +163,7 @@ def main():
 
     # Partie pour afficher les caractéristiques globales
     if st.checkbox("Visualiser les principales caractéristiques globales pour le score"):
-        perfect_model = chargement_model()
+        perfect_model = modele()
         f = lambda x: perfect_model.predict_proba(x)[:, 1]
         med = echantillon_clients.median().values.reshape((1, echantillon_clients.shape[1]))
         explainer = shap.Explainer(f, med)
