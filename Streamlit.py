@@ -41,8 +41,6 @@ def main():
       return pred.get("probability", 0)
 
     echantillon_clients = pd.read_csv("Data_test/echantillon_clients.csv", index_col="SK_ID_CURR")
-    application_test = pd.read_csv("Data_test/dataframe_test.csv")
-    application_test = application_test.sample(100)
     trainset = pd.read_csv("Data_test/trainset.csv")
     trainset_0 = trainset.loc[trainset["TARGET"] == 0].drop(columns=["TARGET"])
     trainset_1 = trainset.loc[trainset["TARGET"] == 1].drop(columns=["TARGET"])
