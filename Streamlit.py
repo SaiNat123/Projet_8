@@ -30,7 +30,7 @@ def main():
     def chargement_model():
         """Chargement du modèle entraîné sur tous les clients avec target"""
         with open(
-            "C:/Users/saidi/Test/mlflow_model/model.pkl",
+            "mlflow_model/model.pkl",
             "rb",
         ) as mod_pickle:
             return pickle.load(mod_pickle)
@@ -40,17 +40,17 @@ def main():
       print("Predictions:", pred)  # Debugging line
       return pred.get("probability", 0)
 
-    echantillon_clients = pd.read_csv("echantillon_clients.csv", index_col="SK_ID_CURR")
-    application_test = pd.read_csv("dataframe_test.csv")
+    echantillon_clients = pd.read_csv("Data_test/echantillon_clients.csv", index_col="SK_ID_CURR")
+    application_test = pd.read_csv("Data_test/dataframe_test.csv")
     application_test = application_test.sample(100)
-    trainset = pd.read_csv("trainset.csv")
+    trainset = pd.read_csv("Data_test/trainset.csv")
     trainset_0 = trainset.loc[trainset["TARGET"] == 0].drop(columns=["TARGET"])
     trainset_1 = trainset.loc[trainset["TARGET"] == 1].drop(columns=["TARGET"])
     seuil = echantillon_clients.iloc[0]["threshold"]
     echantillon_clients = echantillon_clients.drop(columns=["threshold"])
 
-    URI = "http://127.0.0.1:6000/invocations"
-
+    URI = "https://nadat-project7.onrender.com"
+                
     client_choice = st.sidebar.selectbox(
         "Quel client souhaitez-vous évaluer ?", echantillon_clients.index
     )
