@@ -11,7 +11,7 @@ import numpy as np
 def main():
     # 3. Récupération du modèle
     def modele():
-        with open("/mlflow_model/model.pkl", "rb") as mod_pickle:
+        with open("mlflow_model/model.pkl", "rb") as mod_pickle:
             return pickle.load(mod_pickle)
 
         # 2. Module de prédiction
