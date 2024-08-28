@@ -4,3 +4,4 @@ requests
 matplotlib
 shap
 numpy
+lightgbm
