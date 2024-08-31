@@ -50,37 +50,37 @@ def main():
     data_client = info_client(client_choice)
 
     # SIDEBAR
-    st.sidebar.write("Client :blue[{}]".format(client_choice))
+    st.sidebar.write("Client ID: :blue[{}]".format(client_choice))
     st.sidebar.write(
-        "Âge : :orange[{}] ans".format(int(-data_client["DAYS_BIRTH"].values[0] / 365))
+        "Âge : :blue[{}]ans".format(int(-data_client["DAYS_BIRTH"].values[0] / 365))
     )
     st.sidebar.write(
-        "Nombre d'enfant(s) : :orange[{}]".format(
+        "Nombre d'enfant(s): :blue[{}]".format(
             int(data_client["CNT_CHILDREN"].values[0])
         )
     )
     st.sidebar.write(
-        "Revenu total : :orange[{}] $".format(
+        "Revenu total :  :blue[{}]$".format(
             int(data_client["AMT_INCOME_TOTAL"].values[0])
         )
     )
     st.sidebar.write(
-        "Ancienneté dans l'emploi : :orange[{}] an(s)".format(
+        "Ancienneté dans l'emploi :  :blue[{}]an(s)".format(
             int(-data_client["DAYS_EMPLOYED"].values[0] / 365)
         )
     )
     st.sidebar.write(
-        "Crédit sollicité : :orange[{}] $".format(
+        "Crédit sollicité : :blue[{}]$".format(
             int(data_client["AMT_CREDIT"].values[0])
         )
     )
     st.sidebar.write(
-        "Annuité du prêt : :orange[{}] $".format(
+        "Annuité du prêt : :blue[{}]$".format(
             int(data_client["AMT_ANNUITY"].values[0])
         )
     )
     st.sidebar.write(
-        "Prix du bien : :orange[{}] $".format(
+        "Prix du bien : :blue[{}]$".format(
             int(data_client["AMT_GOODS_PRICE"].values[0])
         )
     )
@@ -131,13 +131,11 @@ def main():
     # Ligne indiquant la position de la prédiction
     prediction_angle = np.pi-prediction_value * np.pi
     ax.annotate('', xy=(prediction_angle, 1), xytext=(0, 0),
-                arrowprops=dict(facecolor='black', shrink=0.05, width=2, headwidth=10))
+                arrowprops=dict(facecolor='#1f77b4', shrink=0.05, width=2, headwidth=10))
                 
-    # Ajouter le texte pour le seuil
-    ax.text(seuil_angle, 1.1, f'Seuil: {seuil*100:.0f}%', horizontalalignment='center', fontsize=12, color='orange')
 
     # Ajouter le texte pour la valeur prédite
-    ax.text(prediction_angle, 1.1, f'Prédiction: {prediction_value*100:.0f}%', horizontalalignment='center', fontsize=12, color='blue')
+    ax.text(prediction_angle, 1.1, f'Prédiction: {prediction_value*100:.1f}%', horizontalalignment='center', fontsize=12, color='#1f77b4')
 
 
     # Affichage dans Streamlit
